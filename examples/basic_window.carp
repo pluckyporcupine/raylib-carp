@@ -3,6 +3,8 @@
 
 (load "raylib.carp")
 (use rlcore)
+(use Colors)
+(use Text)
 
 (Project.config "title" "basic_window")
 
@@ -17,7 +19,7 @@
     (while (not (window-should-close))
       (do
         (begin-drawing)
-        (clear-background Color.raywhite)
-        (draw-text (cstr "Congrats! You created your first window!") 190 200 20 Color.lightgray)
+        (clear-background raywhite)
+        (draw-text (cstr "Congrats! You created your first window!") 190 200 20 lightgray)
         (end-drawing)))
     (close-window)))
