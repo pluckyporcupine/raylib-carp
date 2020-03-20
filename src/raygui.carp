@@ -1,0 +1,213 @@
+(relative-include "raygui_helper.h")
+
+(defdynamic-once raygui-library-path "D:\\Code\\GitHub\\raygui\\src\\")
+
+(def raygui-version "2.6-dev")
+
+(defmodule raygui
+  ;;basic defines
+  (def num-controls 16)
+  (def num-props-default 16)
+  (def num-props-extended 8)
+  (def textedit-cursor-blink-frames 20)
+
+  ;;struct define
+  (register-type GuiStyleProp [controlId Uint32, propertyId Uint32, propertyValue Int])
+  (defmodule GuiStyleProp
+    (register copy (Fn [&Image] Image)))
+
+  (register-type GuiControlState)
+  (defmodule GuiControlState
+    (defn = [a b]
+      (Int.= (enum-to-int (the GuiControlState a))
+             (enum-to-int (the GuiControlState b))))
+    (register gui-state-normal GuiControlState "GUI_STATE_NORMAL")
+    (register gui-state-focused GuiControlState "GUI_STATE_FOCUSED")
+    (register gui-state-pressed GuiControlState "GUI_STATE_PRESSED")
+    (register gui-state-disabled GuiControlState "GUI_STATE_DISABLED"))
+
+  (register-type GuiTextAlignment)
+  (defmodule GuiTextAlignment
+    (defn = [a b]
+      (Int.= (enum-to-int (the GuiTextAlignment a))
+             (enum-to-int (the GuiTextAlignment b))))
+    (register gui-text-align-left GuiTextAlignment "GUI_TEXT_ALIGN_LEFT")
+    (register gui-text-align-center GuiTextAlignment "GUI_TEXT_ALIGN_CENTER")
+    (register gui-text-align-right GuiTextAlignment "GUI_TEXT_ALIGN_RIGHT"))
+
+  ;;GuiControl
+  (register default a "DEFAULT")
+  (register label a "LABEL")
+  (register button a "BUTTON")
+  (register slider a "SLIDER")
+  (register progress-bar a "PROGRESSBAR")
+  (register check-box a "CHECKBOX")
+  (register combo-box a "COMBOBOX")
+  (register dropdown-box a "DROPDOWNBOX")
+  (register text-box a "TEXTBOX")
+  (register value-box a "VALUEBOX")
+  (register spinner a "SPINNER")
+  (register list-view a "LISTVIEW")
+  (register color-picker a "COLORPICKER")
+  (register scroll-bar a "SCROLLBAR")
+  (register status-bar a "STATUSBAR")
+
+  ;;GuiControlProperty
+  (register border-color-normal a "BORDER_COLOR_NORMAL")
+  (register base-color-normal a "BASE_COLOR_NORMAL")
+  (register text-color-normal a "TEXT_COLOR_NORMAL")
+  (register border-color-focused a "BORDER_COLOR_FOCUSED")
+  (register base-color-focused a "BASE_COLOR_FOCUSED")
+  (register text-color-focused a "TEXT_COLOR_FOCUSED")
+  (register border-color-pressed a "BORDER_COLOR_PRESSED")
+  (register base-color-pressed a "BASE_COLOR_PRESSED")
+  (register text-color-pressed a "TEXT_COLOR_PRESSED")
+  (register border-color-disabled a "BORDER_COLOR_DISABLED")
+  (register base-color-disabled a "BASE_COLOR_DISABLED")
+  (register text-color-disabled a "TEXT_COLOR_DISABLED")
+  (register border-width a "BORDER_WIDTH")
+  (register text-padding a "TEXT_PADDING")
+  (register text-alignment a "TEXT_ALIGNMENT")
+  (register reserved a "RESERVED")
+
+  ;;GuiDefaultProperty
+  (register text-size a "TEXT_SIZE")
+  (register text-spacing a "TEXT_SPACING")
+  (register line-color a "LINE_COLOR")
+  (register background-color a "BACKGROUND_COLOR")
+
+  ;;GuiToggleProperty
+  (register group-padding a "GROUP_PADDING")
+
+  ;;GuiSliderProperty
+  (register slider-width a "SLIDER_WIDTH")
+  (register slider-padding a "SLIDER_PADDING")
+
+  ;;GuiProgressBarProperty
+  (register progress-padding a "PROGRESS_PADDING")
+  
+  ;;GuiCheckBoxProperty
+  (register check-padding a "CHECK_PADDING")
+
+  ;;GuiComboBoxProperty
+  (register combo-button-width a "COMBO_BUTTON_WIDTH")
+  (register combo-button-padding a "COMBO_BUTTON_PADDING")
+  
+  ;;GuiDropdownBoxProperty
+  (register arrow-padding a "ARROW_PADDING")
+  (register dropdown-items-padding a "DROPDOWN_ITEMS_PADDING")
+
+  ;;GuiTextBoxProperty
+  (register text-inner-padding a "TEXT_INNER_PADDING")
+  (register text-lines-padding a "TEXT_LINES_PADDING")
+  (register color-selected-fg a "COLOR_SELECTED_FG")
+  (register color-selected-bg a "COLOR_SELECTED_BG")
+
+  ;;GuiSpinnerSide
+  (register spin-button-width a "SPIN_BUTTON_WIDTH")
+  (register spin-button-padding a "SPIN_BUTTON_PADDING")
+  
+  ;;GuiScrollBarProperty
+  (register arrows-size a "ARROWS_SIZE")
+  (register arrows-visible a "ARROWS_VISIBLE")
+  (register scroll-slider-padding a "SCROLL_SLIDER_PADDING")
+  (register scroll-slider-size a "SCROLL_SLIDER_SIZE")
+  (register scroll-padding a "SCROLL_PADDING")
+  (register scroll-speed a "SCROLL_SPEED")
+
+  ;;GuiScrollBarSide
+  (register scroll-bar-left-side a "SCROLLBAR_LEFT_SIDE")
+  (register scroll-bar-right-side a "SCROLLBAR_RIGHT_SIDE")
+  
+  ;;GuiListViewProperty
+  (register list-items-height a "LIST_ITEMS_HEIGHT")
+  (register list-items-padding a "LIST_ITEMS_PADDING")
+  (register scroll-bar-width a "SCROLLBAR_WIDTH")
+  (register scroll-bar-side a "SCROLLBAR_SIDE")
+
+  ;;GuiColorPickerProperty
+  (register color-selector-size a "COLOR_SELECTOR_SIZE")
+  (register huebar-width a "HUEBAR_WIDTH")
+  (register huebar-padding a "HUEBAR_PADDING")
+  (register huebar-selector-height a "HUEBAR_SELECTOR_HEIGHT")
+  (register huebar-slector-overflow a "HUEBAR_SELECTOR_OVERFLOW")
+
+  ;;state modification functions
+  (register gui-enable (Fn [] ()) "GuiEnable")
+  (register gui-disable (Fn [] ()) "GuiDisable")
+  (register gui-lock (Fn [] ()) "GuiLock")
+  (register gui-unlock (Fn [] ()) "GuiUnlock")
+  (register gui-fade (Fn [Float] ()) "GuiFade")
+  (register gui-set-state (Fn [GuiControlState] ()) "GuiSetState")
+  (register gui-get-state (Fn [] GuiControlState) "GuiGetState")
+  
+  ;;font set/get functions
+  (register gui-set-font (Fn [Font] ()) "GuiSetFont")
+  (register gui-get-font (Fn [] Font) "GuiGetFont")
+  
+  ;;style set/get functions
+  (register gui-set-style (Fn [Int Int Int] ()) "GuiSetStyle")
+  (register gui-get-style (Fn [Int Int] Int) "GuiGetStyle")
+
+  ;;tooltips set functions
+  (register gui-enable-tooltip (Fn [] ()) "GuiEnableTooltip")
+  (register gui-disable-tooltip (Fn [] ()) "GuiDisableTooltip")
+  (register gui-set-tooltip (Fn [(Ptr Char)] ()) "GuiSetTooltip")
+  (register gui-clear-tooltip (Fn [] ()) "GuiClearTooltip")
+  
+  ;;container/separator controls
+  (register gui-window-box (Fn [Rectangle (Ptr Char)] Bool) "GuiWindowBox")
+  (register gui-group-box (Fn [Rectangle (Ptr Char)] ()) "GuiGroupBox")
+  (register gui-line (Fn [Rectangle (Ptr Char)] ()) "GuiLine")
+  (register gui-panel (Fn [Rectangle] ()) "GuiPanel")
+  (register gui-scroll-panel (Fn [Rectangle Rectangle (Ptr Vector2)] Rectangle) "GuiScrollPanel")
+
+  ;;basic controls
+  (register gui-label (Fn [Rectangle (Ptr Char)] ()) "GuiLabel")
+  (register gui-button (Fn [Rectangle (Ptr Char)] Bool) "GuiButton")
+  (register gui-label-button (Fn [Rectangle (Ptr Char)] Bool) "GuiLabelButton")
+  (register gui-image-button (Fn [Rectangle (Ptr Char) Texture2D] Bool) "GuiImageButton")
+  (register gui-image-button-ex (Fn [Rectangle (Ptr Char) Texture2D Rectangle] Bool) "GuiImageButtonEx")
+  (register gui-toggle (Fn [Rectangle (Ptr Char) Bool] Bool) "GuiToggle")
+  (register gui-toggle-group (Fn [Rectangle (Ptr Char) Int] Int) "GuiToggleGroup")
+  (register gui-check-box (Fn [Rectangle (Ptr Char) Bool] Bool) "GuiCheckBox")
+  (register gui-combo-box (Fn [Rectangle (Ptr Char) (Ptr Int) Bool] Int) "GuiComboBox")
+  (register gui-dropdown-box (Fn [Rectangle (Ptr Char) (Ptr Int) Bool] Bool) "GuiDropdownBox")
+  (register gui-spinner (Fn [Rectangle (Ptr Char) (Ptr Int) Int Int Bool] Bool) "GuiSpinner")
+  (register gui-value-box (Fn [Rectangle (Ptr Char) (Ptr Int) Int Int Bool] Bool) "GuiValueBox")
+  (register gui-text-box (Fn [Rectangle (Ptr Char) Int Bool] Bool) "GuiTextBox")
+  (register gui-text-box-multi (Fn [Rectangle (Ptr Char) Int Bool] Bool) "GuiTextBoxMulti")
+  (register gui-slider (Fn [Rectangle (Ptr Char) (Ptr Char) Float Float Float] Float) "GuiSlider")
+  (register gui-slider-bar (Fn [Rectangle (Ptr Char) (Ptr Char) Float Float Float] Float) "GuiSliderBar")
+  (register gui-progress-bar (Fn [Rectangle (Ptr Char) (Ptr Char) Float Float Float] Float) "GuiProgressBar")
+  (register gui-status-bar (Fn [Rectangle (Ptr Char)] ()) "GuiStatusBar")
+  (register gui-dummy-rec (Fn [Rectangle (Ptr Char)] ()) "GuiDummyRec")
+  (register gui-scroll-bar (Fn [Rectangle Int Int Int] Int) "GuiScrollBar")
+  (register gui-grid (Fn [Rectangle Float Int] Vector2) "GuiGrid")
+
+  ;;advanced controls
+  (register gui-list-view (Fn [Rectangle (Ptr Char) (Ptr Int) Int] Int) "GuiListView")
+  (register gui-list-view-ex (Fn [Rectangle (Ptr (Ptr Char)) Int (Ptr Int) (Ptr Int) Int] Int) "GuiListViewEx")
+  (register gui-message-box (Fn [Rectangle (Ptr Char) (Ptr Char) (Ptr Char)] Int) "GuiMessageBox")
+  (register gui-text-input-box (Fn [Rectangle (Ptr Char) (Ptr Char) (Ptr Char) (Ptr Char)] Int) "GuiTextInputBox")
+  (register gui-color-picker (Fn [Rectangle Color] Color) "GuiColorPicker")
+  (register gui-color-panel (Fn [Rectangle Color] Color) "GuiColorPanel")
+  (register gui-color-bar-alpha (Fn [Rectangle Float] Float) "GuiColorBarAlpha")
+  (register gui-color-bar-hue (Fn [Rectangle Float] Float) "GuiColorBarHue")
+
+  ;;style loading functions
+  (register gui-load-style (Fn [(Ptr Char)] ()) "GuiLoadStyle")
+  (register gui-load-style-default (Fn [] ()) "GuiLoadStyleDefault")
+  
+  (register gui-icon-text (Fn [Int (Ptr Char)] (Ptr Char)) "GuiIconText")
+
+  ;;gui icons functionality, doesn't work yet, requires ricons.h and bindings for it
+  (register gui-draw-icon (Fn [Int Vector2 Int Color] ()) "GuiDrawIcon")
+  
+  (register gui-get-icons (Fn [] (Ptr Uint32)) "GuiGetIcons")
+  (register gui-get-icon-data (Fn [Int] (Ptr Uint32)) "GuiGetIconData")
+  (register gui-set-icon-data (Fn [Int (Ptr Uint32)] ()) "GuiSetIconData")
+
+  (register gui-set-icon-pixel (Fn [Int Int Int] ()) "GuiSetIconPixel")
+  (register gui-clear-icon-pixel (Fn [Int Int Int] ()) "GuiClearIconPixel")
+  (register gui-check-icon-pixel (Fn [Int Int Int] Bool) "GuiCheckIconPixel"))

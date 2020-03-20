@@ -19,6 +19,13 @@ I almost definitely need to re-evaluate how structs with static-length array mem
 
 Despite these issues, you should already be more than capable of creating 2D games with these bindings.
 
+## Requirements
+
+* [Carp](https://github.com/carp-lang/Carp)
+* LLVM
+* [raylib](https://github.com/raysan5/raylib)
+* (Optional) [raygui](https://github.com/raysan5/raygui)
+
 ## Quirks
 
 There are a few things that I've had to do to get this working. They are as follows.
@@ -48,4 +55,6 @@ Additionally, there are a few stylistic quirks that you should be aware of.
 
 ## Other raylib modules
 
-I have not yet created bindings for any raygui or rlgl.
+Bindings for raygui are available. If you want to use them standalone, simply add `#define RAYGUI_STANDALONE` to the top of `raygui_helper.h`.
+
+I have not yet created bindings for raymath or rlgl.
