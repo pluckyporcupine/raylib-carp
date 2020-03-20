@@ -13,9 +13,11 @@ These bindings are still a major work in progress. Expect bugs.
 * The `TraceLogCallback` typedef.
 * The `RAudioBuffer` struct does not have a `copy` function yet.
 
-I almost definitely need to re-evaluate how structs with static-length arrays are initialized.
+As of right now, only a few structs have equality functions implemented. More will be added as it becomes apparent that they are needed.
 
-All known potential issues should only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
+I almost definitely need to re-evaluate how structs with static-length array members are initialized.
+
+Despite these issues, you should already be more than capable of creating 2D games with these bindings.
 
 ## Quirks
 
