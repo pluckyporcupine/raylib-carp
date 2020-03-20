@@ -667,7 +667,7 @@
   (register fade (Fn [Color Float] Color) "Fade")
 
   ;;misc functions
-  (register set-config-clags (Fn [Uint32] ()) "SetConfigFlags")
+  (register set-config-flags (Fn [ConfigFlag] ()) "SetConfigFlags")
   (register set-trace-log-level (Fn [TraceLogType] ()) "SetTraceLogLevel")
   (register set-trace-log-exit (Fn [TraceLogType] ()) "SetTraceLogExit")
   (register set-trace-log-callback (Fn [TraceLogCallback] ()) "SetTraceLogCallback")
@@ -771,7 +771,7 @@
   (register draw-circle-sector-lines (Fn [Vector2 Float Int Int Int Color] ()) "DrawCircleSectorLines")
   (register draw-circle-gradient (Fn [Int Int Float Color Color] ()) "DrawCircleGradient")
   (register draw-circle-v (Fn [Vector2 Float Color] ()) "DrawCircleV")
-  (register draw-cicle-lines (Fn [Int Int Float Color] ()) "DrawCircleLines")
+  (register draw-circle-lines (Fn [Int Int Float Color] ()) "DrawCircleLines")
   (register draw-ellipse (Fn [Int Int Float Float Color] ()) "DrawEllipse")
   (register draw-ellipse-lines (Fn [Int Int Float Float Color] ()) "DrawEllipseLines")
   (register draw-ring (Fn [Vector2 Float Float Int Int Int Color] ()) "DrawRing")

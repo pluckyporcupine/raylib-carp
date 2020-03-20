@@ -1,0 +1,89 @@
+(use Int)
+
+(load "raylib.carp")
+(use rlcore)
+(use Colors)
+(use rlText)
+(use rlShapes)
+(load "raygui.carp")
+(use raygui)
+
+(Project.config "title" "shapes_draw_ring")
+
+(def screen-width 800)
+(def screen-height 450)
+
+(defn main []
+  (let-do [center (Vector2.init (/ (- (Float.from-int screen-width) 300.0f) 2.0f)
+                                (/ (Float.from-int screen-height) 2.0f))
+           inner-radius 80.0f
+           outer-radius 190.0f
+           start-angle 0.0f
+           end-angle 360.0f
+           segments 0.0f
+           draw-ring-on true
+           draw-ring-lines-on false
+           draw-circle-lines-on false
+           ]
+          (init-window screen-width screen-height (cstr "raylib [shapes] example - draw ring"))
+          (set-target-fps 60)
+          
+          (while (not (window-should-close))
+            (let-do [start-rec (Rectangle.init 600.0f 40.0f 120.0f 20.0f)
+                     end-rec (Rectangle.init 600.0f 70.0f 120.0f 20.0f)
+                     inner-rec (Rectangle.init 600.0f 140.0f 120.0f 20.0f)
+                     outer-rec (Rectangle.init 600.0f 170.0f 120.0f 20.0f)
+                     segments-rec (Rectangle.init 600.0f 240.0f 120.0f 20.0f)
+                     draw-ring-rec (Rectangle.init 600.0f 320.0f 20.0f 20.0f)
+                     draw-ring-lines-rec (Rectangle.init 600.0f 350.0f 20.0f 20.0f)
+                     draw-circle-lines-rec (Rectangle.init 600.0f 380.0f 20.0f 20.0f)
+                     mode-text "MANUAL"
+                     ]
+              (begin-drawing)
+              (clear-background raywhite)
+              (draw-line 500 0 500 (get-screen-height) (fade lightgray 0.6f))
+              (draw-rectangle 500 0 (- (get-screen-width) 500) (get-screen-height) 
+                              (fade lightgray 0.3f))
+              
+              (if draw-ring-on
+                (draw-ring center inner-radius outer-radius (Float.to-int start-angle) 
+                           (Float.to-int end-angle) (Float.to-int segments) (fade maroon 0.3f))
+                ())
+              (if draw-ring-lines-on
+                (draw-ring-lines center inner-radius outer-radius (Float.to-int start-angle)
+                                 (Float.to-int end-angle) (Float.to-int segments) (fade black 0.4f))
+                ())
+              (if draw-circle-lines-on
+                (draw-circle-sector-lines center outer-radius (Float.to-int start-angle)
+                                          (Float.to-int end-angle) (Float.to-int segments) 
+                                          (fade black 0.4f))
+                ())
+                    
+              (set! start-angle (gui-slider-bar start-rec (cstr "StartAngle") (cstr "") 
+                                                start-angle -450.0f 450.0f))
+              (set! end-angle (gui-slider-bar end-rec (cstr "EndAngle") (cstr "") 
+                                              end-angle -450.0f 450.0f))
+              
+              (set! inner-radius (gui-slider-bar inner-rec (cstr "InnerRadius") (cstr "") 
+                                                 inner-radius 0.0f 100.0f))
+              (set! outer-radius (gui-slider-bar outer-rec (cstr "OuterRadius") (cstr "") 
+                                                 outer-radius 0.0f 200.0f))
+              
+              (set! segments (gui-slider-bar segments-rec (cstr "Segments") (cstr "") 
+                                             segments 0.0f 100.0f))
+              
+              (set! draw-ring-on (gui-check-box draw-ring-rec (cstr "Draw Ring") draw-ring-on))
+              (set! draw-ring-lines-on (gui-check-box draw-ring-lines-rec 
+                                                      (cstr "Draw RingLines") draw-ring-lines-on))
+              (set! draw-circle-lines-on (gui-check-box draw-circle-lines-rec 
+                                                        (cstr "Draw CircleLines") draw-circle-lines-on))
+              
+              (if (or (> segments 4.0f) (= segments 4.0f))
+                (set! mode-text "MANUAL")
+                (set! mode-text "AUTO"))
+              
+              (draw-text (cstr &(format "MODE: %s" mode-text)) 
+                         600 270 10 (if (or (> segments 4.0f) (= segments 4.0f)) maroon darkgray))
+              (draw-fps 10 10)
+              (end-drawing)))
+          (close-window)))
