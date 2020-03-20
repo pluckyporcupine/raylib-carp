@@ -14,7 +14,7 @@ These bindings are still a major work in progress. Expect bugs.
 
 I almost definitely need to re-evaluate how structs with static-length arrays are initialized.
 
-*You may not be able to copy certain structs yet.* I'm adding `copy` functions for structs as needed right now.
+*You may not be able to copy certain structs yet.* For the time being, I'm adding `copy` functions for structs as needed.
 
 However, all known potential issues only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
 
