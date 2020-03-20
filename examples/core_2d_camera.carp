@@ -1,0 +1,119 @@
+(use Array)
+(use String)
+
+(load "raylib.carp")
+(use rlcore)
+(use KeyboardKey)
+(use Colors)
+(use Shapes)
+(use Text)
+
+(Project.config "title" "core_2d_camera")
+
+(def max-buildings 100)
+(def screen-width 800)
+(def screen-height 450)
+
+(defn main []
+  (do
+    (init-window screen-width screen-height (cstr "raylib [core] example - 2d camera"))
+    (set-target-fps 60)
+    (let-do [player (Rectangle.init 400.0f 280.0f 40.0f 40.0f)
+             camera (Camera2D.init (Vector2.init (/ (Float.from-int screen-width) 2.0f) 
+                                                 (/ (Float.from-int screen-height) 2.0f)) 
+                                   (Vector2.init (+ @(Rectangle.x &player) 20.0f) 
+                                                 (+ @(Rectangle.y &player) 20.0f)) 
+                                   0.0f 
+                                   1.0f)
+             buildings (Array.allocate max-buildings)
+             build-colors (Array.allocate max-buildings)
+             spacing 0.0f]
+            (for [i 0 (- max-buildings 1)]
+              (let-do [h (Float.random-between 100.0f 800.0f)
+                       w (Float.random-between 50.0f 200.0f)]
+                      (Array.aset! &buildings i (Rectangle.init (+ -6000.0f spacing) 
+                                                                (- (- (Float.from-int screen-height) 130.0f) h) 
+                                                                w 
+                                                                h))
+                      (Array.aset! &build-colors i (Color.init (Byte.random-between 200b 240b) 
+                                                               (Byte.random-between 200b 240b) 
+                                                               (Byte.random-between 200b 250b) 
+                                                               255b))
+                      (set! spacing (+ spacing w))))
+            (while (not (window-should-close))
+              (let-do [ox @(Vector2.x (Camera2D.offset &camera))
+                       oy @(Vector2.y (Camera2D.offset &camera))
+                       tx @(Vector2.x (Camera2D.target &camera))
+                       ty @(Vector2.y (Camera2D.target &camera))
+                       r @(Camera2D.rotation &camera)
+                       z @(Camera2D.zoom &camera)
+                       px @(Rectangle.x &player)
+                       py @(Rectangle.y &player)
+                       pw @(Rectangle.width &player)
+                       ph @(Rectangle.height &player)
+                       ]
+                (if (is-key-down key-right)
+                  (set! px (+ px 2.0f))
+                  ())
+                (if (is-key-down key-left)
+                  (set! px (- px 2.0f))
+                  ())
+                (if (is-key-down key-a)
+                  (set! r (- r 1.0f))
+                  ())
+                (if (is-key-down key-s)
+                  (set! r (+ r 1.0f))
+                  ())
+                
+                (if (> r 40.0f)
+                  (set! r 40.0f)
+                  (if (< r -40.0f)
+                    (set! r -40.0f)
+                    ()))
+                
+                (if (is-key-pressed key-r)
+                  (do 
+                    (set! z 1.0f)
+                    (set! r 0.0f))
+                  ())
+                
+                (set! player (Rectangle.init px py pw ph))
+                (set! z (+ z (* (Float.from-int (get-mouse-wheel-move)) 0.05f)))
+                (set! tx (+ px 20.0f))
+                (set! ty (+ py 20.0f))
+                (set! camera (Camera2D.init (Vector2.init ox oy)
+                                            (Vector2.init tx ty)
+                                            r
+                                            z))
+                (begin-drawing)
+                  (clear-background raywhite)
+                  (begin-mode-2d camera)
+                    (draw-rectangle -6000 320 13000 8000 darkgray)
+                
+                    (for [i 0 (- max-buildings 1)]
+                      (let [b @(Array.unsafe-nth &buildings i)
+                            bc @(Array.unsafe-nth &build-colors i)]
+                        (draw-rectangle-rec b bc)))
+                
+                    (draw-rectangle-rec player red)
+                    (draw-line (Float.to-int tx) (* (neg screen-height) 10) (Float.to-int tx) (* screen-height 10) green)
+                    (draw-line (* (neg screen-width) 10) (Float.to-int ty) (* screen-width 10) (Float.to-int ty) green)
+                  (end-mode-2d)
+                
+                  (draw-text (cstr "SCREEN AREA") 640 10 20 red)
+                  
+                  (draw-rectangle 0 0 screen-width 5 red)
+                  (draw-rectangle 0 5 5 (- screen-height 10) red)
+                  (draw-rectangle (- screen-width 5) 5 5 (- screen-height 10) red)
+                  (draw-rectangle 0 (- screen-height 5) screen-width 5 red)
+                
+                  (draw-rectangle 10 10 250 113 (fade skyblue 0.5f))
+                  (draw-rectangle-lines 10 10 250 113 blue)
+                    
+                  (draw-text (cstr "Free 2d camera controls:") 20 20 10 black)
+                  (draw-text (cstr "- Right/Left to move Offset") 40 40 10 darkgray)
+                  (draw-text (cstr "- Mouse Wheel to Zoom in-out") 40 60 10 darkgray)
+                  (draw-text (cstr "- A/S to Rotate") 40 80 10 darkgray)
+                  (draw-text (cstr "- R to reset Zoom and Rotation") 40 100 10 darkgray)
+                (end-drawing)))
+            (close-window))))

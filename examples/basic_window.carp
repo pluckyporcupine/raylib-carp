@@ -1,0 +1,23 @@
+(use Int)
+(use String)
+
+(load "raylib.carp")
+(use rlcore)
+
+(Project.config "title" "basic_window")
+
+(def screen-width 800)
+(def screen-height 450)
+
+(defn main []
+  (do
+    (init-window screen-width screen-height (cstr "raylib [core] example - basic window"))
+    (set-target-fps 60)
+    
+    (while (not (window-should-close))
+      (do
+        (begin-drawing)
+        (clear-background Color.raywhite)
+        (draw-text (cstr "Congrats! You created your first window!") 190 200 20 Color.lightgray)
+        (end-drawing)))
+    (close-window)))
