@@ -17,14 +17,24 @@
 
 ;;struct defines
 (register-type Vector2 [x Float, y Float])
+(defmodule Vector2
+  (register copy (Fn [&Vector2] Vector2)))
 (register-type Vector3 [x Float, y Float, z Float])
+(defmodule Vector3
+  (register copy (Fn [&Vector3] Vector3)))
 (register-type Vector4 [x Float, y Float, z Float, w Float])
+(defmodule Vector4
+  (register copy (Fn [&Vector4] Vector4)))
 (register-type Quaternion)
+(defmodule Quaternion
+  (register copy (Fn [&Quaternion] Quaternion)))
 
 (register-type Matrix [m0 Float, m4 Float, m8 Float, m12 Float,
                        m1 Float, m5 Float, m9 Float, m13 Float,
                        m2 Float, m6 Float, m10 Float, m14 Float,
                        m3 Float, m7 Float, m11 Float, m15 Float])
+(defmodule Matrix
+  (register copy (Fn [&Matrix] Matrix)))
 
 (register-type Color [r Byte, g Byte, b Byte, a Byte])
 (defmodule Color
@@ -35,60 +45,117 @@
   (register copy (Fn [&Rectangle] Rectangle)))
 
 (register-type Image [data VoidPtr, width Int, height Int, mipmaps Int, format Int])
+(defmodule Image
+  (register copy (Fn [&Image] Image)))
 
 (register-type Texture2D [id Uint32, width Int, height Int, mipmaps Int, format Int])
+(defmodule Texture2D
+  (register copy (Fn [&Texture2D] Texture2D)))
 (register-type Texture)
+(defmodule Texture
+  (register copy (Fn [&Texture] Texture)))
 (register-type TextureCubemap)
+(defmodule TextureCubemap
+  (register copy (Fn [&TextureCubemap] TextureCubemap)))
 
 (register-type RenderTexture2D [id Uint32, texture Texture2D, depth Texture2D, depthTexture Bool])
+(defmodule RenderTexture2D
+  (register copy (Fn [&RenderTexture2D] RenderTexture2D)))
 (register-type RenderTexture)
+(defmodule RenderTexture
+  (register copy (Fn [&RenderTexture] RenderTexture)))
 
 (register-type NPatchInfo [sourceRec Rectangle, left Int, top Int, right Int, bottom Int, type Int])
+(defmodule NPatchInfo
+  (register copy (Fn [&NPatchInfo] NPatchInfo)))
 
 (register-type CharInfo [value Int, offsetX Int, offsetY Int, advanceX Int, image Image])
+(defmodule CharInfo
+  (register copy (Fn [&CharInfo] CharInfo)))
 (register-type Font [baseSize Int, charsCount Int, texture Texture2D, recs (Ptr Rectangle), chars (Ptr CharInfo)])
+(defmodule Font
+  (register copy (Fn [&Font] Font)))
 (register-type SpriteFont)
+(defmodule SpriteFont
+  (register copy (Fn [&SpriteFont] SpriteFont)))
 
 (register-type Camera3D [position Vector3, target Vector3, up Vector3, fovy Float, type Int])
+(defmodule Camera3D
+  (register copy (Fn [&Camera3D] Camera3D)))
 (register-type Camera)
+(defmodule Camera
+  (register copy (Fn [&Camera] Camera)))
 (register-type Camera2D [offset Vector2, target Vector2, rotation Float, zoom Float])
+(defmodule Camera2D
+  (register copy (Fn [&Camera2D] Camera2D)))
 
 (register-type Mesh [vertexCount Int, triangleCount Int, vertices (Ptr Float), 
                      texcoords (Ptr Float), texcoords2 (Ptr Float), normals (Ptr Float),
                      tangents (Ptr Float), colors (Ptr Byte), indices (Ptr Uint16),
                      animVertices (Ptr Float), animNormals (Ptr Float), boneIds (Ptr Int),
                      boneWeights (Ptr Float), vaoId Uint32, vboId (Ptr Uint32)])
+(defmodule Mesh
+  (register copy (Fn [&Mesh] Mesh)))
 
 (register-type Shader [id Uint32, locs (Ptr Int)])
+(defmodule Shader
+  (register copy (Fn [&Shader] Shader)))
 
 (register-type MaterialMap [texture Texture2D, color Color, value Float])
+(defmodule MaterialMap
+  (register copy (Fn [&MaterialMap] MaterialMap)))
 (register-type Material [shader Shader, maps (Ptr MaterialMap), params (Ptr Float)])
+(defmodule Material
+  (register copy (Fn [&Material] Material)))
 
 (register-type Transform [translation Vector3, rotation Quaternion, scale Vector3])
+(defmodule Transform
+  (register copy (Fn [&Transform] Transform)))
 (register-type BoneInfo)
 (defmodule BoneInfo
   (defn init [] ())
   (defn set-name [b n] b)
   (defn set-name! [b n] ())
   (defn update-name [b f] b)
-  (defn update-name! [b f] ()))
+  (defn update-name! [b f] ())
+  (register copy (Fn [&BoneInfo] BoneInfo)))
 (register-type Model [transform Matrix, meshCount Int, meshes (Ptr Mesh),
                       materialCount Int, materials (Ptr Material), meshMaterial (Ptr Int),
                       boneCount Int, bones (Ptr BoneInfo), bindPose (Ptr Transform)])
+(defmodule Model
+  (register copy (Fn [&Model] Model)))
 (register-type ModelAnimation [boneCount Int, bones (Ptr BoneInfo), frameCount Int, framePoses (Ptr (Ptr Transform))])
+(defmodule ModelAnimation
+  (register copy (Fn [&ModelAnimation] ModelAnimation)))
 
 (register-type Ray [position Vector3, direction Vector3])
+(defmodule Ray
+  (register copy (Fn [&Ray] Ray)))
 (register-type RayHitInfo [hit Bool, distance Float, position Vector3, normal Vector3])
+(defmodule RayHitInfo
+  (register copy (Fn [&RayHitInfo] RayHitInfo)))
 
 (register-type BoundingBox [min Vector3, max Vector3])
+(defmodule BoundingBox
+  (register copy (Fn [&BoundingBox] BoundingBox)))
 
 (register-type Wave [sampleCount Uint32, sampleRate Uint32, sampleSize Uint32, channels Uint32, data VoidPtr])
+(defmodule Wave
+  (register copy (Fn [&Wave] Wave)))
 (register-type RAudioBuffer)
 (register-type AudioStream [sampleRate Uint32, sampleSize Uint32, channels Uint32, buffer (Ptr RAudioBuffer)])
+(defmodule AudioStream
+  (register copy (Fn [&AudioStream] AudioStream)))
 (register-type Sound [sampleCount Uint32, stream AudioStream])
+(defmodule Sound
+  (register copy (Fn [&Sound] Sound)))
 (register-type Music [ctxType Int, ctxData VoidPtr, sampleCount Uint32, loopCount Uint32, stream AudioStream])
+(defmodule Music
+  (register copy (Fn [&Music] Music)))
 
 (register-type VrDeviceInfo)
+(defmodule VrDeviceInfo
+  (register copy (Fn [&VrDeviceInfo] VrDeviceInfo)))
 
 (defmodule Colors
   (register lightgray Color "LIGHTGRAY")

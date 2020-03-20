@@ -11,12 +11,11 @@ These bindings are still a major work in progress. Expect bugs.
 * The `BoneInfo` struct.
 * The `VrDeviceInfo` struct.
 * The `TraceLogCallback` typedef.
+* The `RAudioBuffer` struct does not have a `copy` function yet.
 
 I almost definitely need to re-evaluate how structs with static-length arrays are initialized.
 
-*You may not be able to copy certain structs yet.* For the time being, I'm adding `copy` functions for structs as needed.
-
-However, all known potential issues only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
+However, all known potential issues should only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
 
 ## Quirks
 
