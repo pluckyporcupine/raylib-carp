@@ -14,6 +14,8 @@ These bindings are still a major work in progress. Expect bugs.
 
 I almost definitely need to re-evaluate how structs with static-length arrays are initialized.
 
+*You may not be able to copy certain structs yet.* I'm adding `copy` functions for structs as needed right now.
+
 However, all known potential issues only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
 
 ## Quirks
@@ -33,7 +35,7 @@ There are a few things that I've had to do to get this working. They are as foll
   #include <windows.h>
   #undef PlaySound
   ```
-  
+
   I've provided my `core.h` for convenience. On non-Windows platforms, this does not apply. Keep in mind that I cannot guarantee that this will not cause problems for certain programs.
 
   * I've also had to create a helper header called `raylib_helper.h`. This contains a few defines and functions that allow the bindings to work properly. Like the Carp side of the bindings, this header is a work in progress.
