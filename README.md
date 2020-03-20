@@ -47,4 +47,4 @@ Additionally, there are a few stylistic quirks that you should be aware of.
 
 ## Other raylib modules
 
-I have not yet created bindings for any other raylib modules.
+I have not yet created bindings for any raygui or rlgl.
