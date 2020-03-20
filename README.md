@@ -15,7 +15,7 @@ These bindings are still a major work in progress. Expect bugs.
 
 I almost definitely need to re-evaluate how structs with static-length arrays are initialized.
 
-However, all known potential issues should only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
+All known potential issues should only affect 3D games. You should already be more than capable of creating 2D games with these bindings.
 
 ## Quirks
 
