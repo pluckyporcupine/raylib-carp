@@ -21,7 +21,6 @@ However, all known potential issues only affect 3D games. You should already be 
 There are a few things that I've had to do to get this working. They are as follows.
 
   * I've had to modify Carp's `core.h` to remove Windows headers that contain functions that cause naming collisions with raylib functions.
-
   The changes I've made are:
   ```
   #define NODRAWTEXT
@@ -32,8 +31,8 @@ There are a few things that I've had to do to get this working. They are as foll
   #include <windows.h>
   #undef PlaySound
   ```
-
   I've provided my `core.h` for convenience. On non-Windows platforms, this does not apply. Keep in mind that I cannot guarantee that this will not cause problems for certain programs.
+  
   * I've also had to create a helper header called `raylib_helper.h`. This contains a few defines and functions that allow the bindings to work properly. Like the Carp side of the bindings, this header is a work in progress.
 
 Additionally, there are a few stylistic quirks that you should be aware of.
