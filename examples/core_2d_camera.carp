@@ -5,8 +5,8 @@
 (use rlcore)
 (use KeyboardKey)
 (use Colors)
-(use Shapes)
-(use Text)
+(use rlShapes)
+(use rlText)
 
 (Project.config "title" "core_2d_camera")
 
