@@ -1,10 +1,12 @@
 # raylib-carp
 
-WIP [Carp](https://github.com/carp-lang/Carp) bindings for [the raylib gamedev library](https://github.com/raysan5/raylib). These bindings are made for and only confirmed to be working with raylib-2.6.0.
+WIP [Carp](https://github.com/carp-lang/Carp) bindings for [the raylib gamedev library](https://github.com/raysan5/raylib).
 
 ## Current state
 
 These bindings are still a major work in progress. Expect bugs.
+
+There is tentative support for raylib 3.0. It has not been tested as of yet.
 
 ### Things that I'm aware might not work
 

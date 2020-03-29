@@ -163,6 +163,7 @@
 (defmodule VrDeviceInfo
   (register copy (Fn [&VrDeviceInfo] VrDeviceInfo)))
 
+;;enum defines
 (defmodule Colors
   (register lightgray Color "LIGHTGRAY")
   (register gray Color "GRAY")
@@ -676,6 +677,10 @@
   (register get-random-value (Fn [Int Int] Int) "GetRandomValue")
 
   ;;file management functions
+  (register load-file-data (Fn [(Ptr Char) (Ptr Int)] (Ptr Char)) "LoadFileData")
+  (register save-file-data (Fn [(Ptr Char) VoidPtr Int] ()) "SaveFileData")
+  (register load-file-text (Fn [(Ptr Char)] (Ptr Char)) "LoadFileText")
+  (register save-file-text (Fn [(Ptr Char) (Ptr Char)] ()) "SaveFileText")
   (register file-exists (Fn [(Ptr Char)] Bool) "FileExists")
   (register is-file-extension (Fn [(Ptr Char) (Ptr Char)] Bool) "IsFileExtension")
   (register directory-exists (Fn [(Ptr Char)] Bool) "DirectoryExists")
@@ -825,6 +830,7 @@
   (register get-texture-data (Fn [Texture2D] Image) "GetTextureData")
   (register get-screen-data (Fn [] Image) "GetScreenData")
   (register update-texture (Fn [Texture2D VoidPtr] ()) "UpdateTexture")
+  ;;(register load-animated-gif (Fn [] ) "LoadAnimatedGIF")
   
   ;;image manipulation functions
   (register image-copy (Fn [Image] Image) "ImageCopy")
@@ -844,11 +850,6 @@
   (register image-extract-palette (Fn [Image Int (Ptr Int)] (Ptr Color)) "ImageExtractPalette")
   (register image-text (Fn [(Ptr Char) Int Color] Image) "ImageText")
   (register image-text-ex (Fn [Font (Ptr Char) Float Float Color] Image) "ImageTextEx")
-  (register image-draw (Fn [(Ptr Image) Image Rectangle Rectangle Color] ()) "ImageDraw")
-  (register image-draw-rectangle (Fn [(Ptr Image) Rectangle Color] ()) "ImageDrawRectangle")
-  (register image-draw-rectangle-lines (Fn [(Ptr Image) Rectangle Int Color] ()) "ImageDrawRectangleLines")
-  (register image-draw-text (Fn [(Ptr Image) Vector2 (Ptr Char) Int Color] ()) "ImageDrawText")
-  (register image-draw-text-ex (Fn [(Ptr Image) Vector2 Font (Ptr Char) Float Float Color] ()) "ImageDrawTextEx")
   (register image-flip-vertical (Fn [(Ptr Image)] ()) "ImageFlipVertical")
   (register image-flip-horizontal (Fn [(Ptr Image)] ()) "ImageFlipHorizontal")
   (register image-rotate-cw (Fn [(Ptr Image)] ()) "ImageRotateCW")
@@ -859,6 +860,23 @@
   (register image-color-contrast (Fn [(Ptr Image) Float] ()) "ImageColorContrast")
   (register image-color-brightness (Fn [(Ptr Image) Int] ()) "ImageColorBrightness")
   (register image-color-replace (Fn [(Ptr Image) Color Color] ()) "ImageColorReplace")
+  (register image-clear-background (Fn [(Ptr Image) Color] ()) "ImageClearBackground")
+
+  ;;image drawing functions
+  (register image-draw (Fn [(Ptr Image) Image Rectangle Rectangle Color] ()) "ImageDraw")
+  (register image-draw-pixel (Fn [(Ptr Image) Int Int Color] ()) "ImageDrawPixel")
+  (register image-draw-pixel-v (Fn [(Ptr Image) Vector2 Color] ()) "ImageDrawPixelV")
+  (register image-draw-line (Fn [(Ptr Image) Int Int Int Int Color] ()) "ImageDrawLine")
+  (register image-draw-line-v (Fn [(Ptr Image) Vector2 Vector2 Color] ()) "ImageDrawLineV")
+  ;; (register image-draw-line-ex (Fn [] ()) "ImageDrawLineEx")
+  (register image-draw-circle (Fn [(Ptr Image) Int Int Int Color] ()) "ImageDrawCircle")
+  (register image-draw-circle-v (Fn [(Ptr Image) Vector2 Int Color] ()) "ImageDrawCircleV")
+  (register image-draw-rectangle (Fn [(Ptr Image) Rectangle Color] ()) "ImageDrawRectangle")
+  (register image-draw-rectangle-v (Fn [(Ptr Image) Vector2 Vector2 Color] ()) "ImageDrawRectangleV")
+  (register image-draw-rectangle-rec (Fn [(Ptr Image) Rectangle Color] ()) "ImageDrawRectangleRec")
+  (register image-draw-rectangle-lines (Fn [(Ptr Image) Rectangle Int Color] ()) "ImageDrawRectangleLines")
+  (register image-draw-text (Fn [(Ptr Image) Vector2 (Ptr Char) Int Color] ()) "ImageDrawText")
+  (register image-draw-text-ex (Fn [(Ptr Image) Vector2 Font (Ptr Char) Float Float Color] ()) "ImageDrawTextEx")
   
   ;;image generation functions
   (register gen-image-color (Fn [Int Int Color] Image) "GenImageColor")
