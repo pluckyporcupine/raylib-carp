@@ -6,7 +6,7 @@ WIP [Carp](https://github.com/carp-lang/Carp) bindings for [the raylib gamedev l
 
 These bindings are still a major work in progress. Expect bugs.
 
-There is tentative support for raylib 3.0, but has not been tested as of yet.
+There is tentative support for raylib 3.0, but it has not been tested as of yet.
 
 ### Things that I'm aware might not work
 
