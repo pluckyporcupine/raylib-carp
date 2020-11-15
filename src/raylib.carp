@@ -2,6 +2,9 @@
 
 (defdynamic-once raylib-library-path "D:\\Code\\CLibraries\\raylib-2.6.0-Win64-msvc15\\lib\\")
 
+(not-on-windows
+  (add-pkg "raylib"))
+
 (windows-only
  (add-lib (str "/link " raylib-library-path "raylib.lib")))
 
